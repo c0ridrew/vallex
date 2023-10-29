@@ -1,13 +1,16 @@
 # coding: utf-8
+import logging
 import os
+
+import langid
 import torch
 from vocos import Vocos
-import logging
-import langid
+
 langid.set_languages(['en', 'zh', 'ja'])
 
 import pathlib
 import platform
+
 if platform.system().lower() == 'windows':
     temp = pathlib.PosixPath
     pathlib.PosixPath = pathlib.WindowsPath
@@ -16,16 +19,13 @@ else:
     pathlib.WindowsPath = pathlib.PosixPath
 
 import numpy as np
-from data.tokenizer import (
-    AudioTokenizer,
-    tokenize_audio,
-)
-from data.collation import get_text_token_collater
-from models.vallex import VALLE
-from utils.g2p import PhonemeBpeTokenizer
-from utils.sentence_cutter import split_text_into_sentences
 
-from macros import *
+from vallex.data.collation import get_text_token_collater
+from vallex.data.tokenizer import AudioTokenizer, tokenize_audio
+from vallex.macros import *
+from vallex.models.vallex import VALLE
+from vallex.utils.g2p import PhonemeBpeTokenizer
+from vallex.utils.sentence_cutter import split_text_into_sentences
 
 device = torch.device("cpu")
 if torch.cuda.is_available():

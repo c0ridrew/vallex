@@ -17,8 +17,8 @@
 
 import collections
 import logging
-import random
 import math
+import random
 from functools import reduce
 from itertools import repeat
 from typing import Optional, Tuple, Union
@@ -29,7 +29,7 @@ import torch.nn.functional as F
 from torch import Tensor
 from torch.nn import Embedding as ScaledEmbedding
 
-from utils import Transpose
+from vallex.utils import Transpose
 
 
 class ActivationBalancerFunction(torch.autograd.Function):

@@ -1,22 +1,24 @@
+import logging
 import os
+import subprocess
+
+import langid
 import torch
 import torchaudio
-import logging
-import langid
 import whisper
+
 langid.set_languages(['en', 'zh', 'ja'])
 
 import numpy as np
-from data.tokenizer import (
-    AudioTokenizer,
-    tokenize_audio,
-)
-from data.collation import get_text_token_collater
-from utils.g2p import PhonemeBpeTokenizer
 
-from macros import *
+from vallex.data.collation import get_text_token_collater
+from vallex.data.tokenizer import AudioTokenizer, tokenize_audio
+from vallex.macros import *
+from vallex.utils.g2p import PhonemeBpeTokenizer
 
-text_tokenizer = PhonemeBpeTokenizer(tokenizer_path="./utils/g2p/bpe_69.json")
+DIR_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+
+text_tokenizer = PhonemeBpeTokenizer(tokenizer_path=f"{DIR_PATH}/g2p/bpe_69.json")
 text_collater = get_text_token_collater()
 
 device = torch.device("cpu")
@@ -26,7 +28,7 @@ if torch.backends.mps.is_available():
     device = torch.device("mps")
 codec = AudioTokenizer(device)
 
-if not os.path.exists("./whisper/"): os.mkdir("./whisper/")
+if not os.path.exists(f"{DIR_PATH}/../whisper/"): os.mkdir(f"{DIR_PATH}/../whisper/")
 whisper_model = None
 
 @torch.no_grad()
@@ -79,7 +81,7 @@ def make_prompt(name, audio_prompt_path, transcript=None):
     message = f"Detected language: {lang_pr}\n Detected text {text_pr}\n"
 
     # save as npz file
-    save_path = os.path.join("./customs/", f"{name}.npz")
+    save_path = os.path.join(f"{DIR_PATH}/../customs/", f"{name}.npz")
     np.savez(save_path, audio_tokens=audio_tokens, text_tokens=text_tokens, lang_code=lang2code[lang_pr])
     logging.info(f"Successful. Prompt saved to {save_path}")
 
@@ -101,11 +103,11 @@ def make_transcript(name, wav, sr, transcript=None):
         if whisper_model is None:
             whisper_model = whisper.load_model("medium", download_root=os.path.join(os.getcwd(), "whisper"))
         whisper_model.to(device)
-        torchaudio.save(f"./prompts/{name}.wav", wav, sr)
-        lang, text = transcribe_one(whisper_model, f"./prompts/{name}.wav")
+        torchaudio.save(f"{DIR_PATH}/../prompts/{name}.wav", wav, sr)
+        lang, text = transcribe_one(whisper_model, f"{DIR_PATH}/../prompts/{name}.wav")
         lang_token = lang2token[lang]
         text = lang_token + text + lang_token
-        os.remove(f"./prompts/{name}.wav")
+        os.remove(f"{DIR_PATH}/../prompts/{name}.wav")
         whisper_model.cpu()
     else:
         text = transcript

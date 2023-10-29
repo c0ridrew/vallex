@@ -154,7 +154,7 @@ Explore our [demo page](https://plachtaa.github.io/) for a lot more examples!
   <summary><h3>🪑 Basics</h3></summary>
 
 ```python
-from utils.generation import SAMPLE_RATE, generate_audio, preload_models
+from vallex.utils.generation import SAMPLE_RATE, generate_audio, preload_models
 from scipy.io.wavfile import write as write_wav
 from IPython.display import Audio
 
@@ -234,7 +234,7 @@ You can also leave the transcript blank to let the [Whisper](https://github.com/
 > VALL-E X tries to match the tone, pitch, emotion and prosody of a given prompt. The model also attempts to preserve music, ambient noise, etc.
 
 ```python
-from utils.prompt_making import make_prompt
+from vallex.utils.prompt_making import make_prompt
 
 ### Use given transcript
 make_prompt(name="paimon", audio_prompt_path="paimon_prompt.wav",
@@ -245,7 +245,7 @@ make_prompt(name="paimon", audio_prompt_path="paimon_prompt.wav")
 ```
 Now let's try out the prompt we've just made!
 ```python
-from utils.generation import SAMPLE_RATE, generate_audio, preload_models
+from vallex.utils.generation import SAMPLE_RATE, generate_audio, preload_models
 from scipy.io.wavfile import write as write_wav
 
 # download and load all models

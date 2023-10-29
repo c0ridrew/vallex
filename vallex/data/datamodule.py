@@ -36,10 +36,10 @@ import torch
 # from lhotse.utils import fix_random_seed
 from torch.utils.data import DataLoader
 
-from data.collation import get_text_token_collater
-# from data.dataset import SpeechSynthesisDataset
-from data.fbank import get_fbank_extractor
-from data.input_strategies import PromptedPrecomputedFeatures
+from vallex.data.collation import get_text_token_collater
+# from vallex.data.dataset import SpeechSynthesisDataset
+from vallex.data.fbank import get_fbank_extractor
+from vallex.data.input_strategies import PromptedPrecomputedFeatures
 
 # PrecomputedFeatures = PrecomputedFeatures
 

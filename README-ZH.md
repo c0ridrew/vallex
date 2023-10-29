@@ -148,7 +148,7 @@ https://github.com/Plachtaa/VALL-E-X/assets/112609742/699c47a3-d502-4801-8364-bd
   <summary><h3>🪑 基本使用</h3></summary>
 
 ```python
-from utils.generation import SAMPLE_RATE, generate_audio, preload_models
+from vallex.utils.generation import SAMPLE_RATE, generate_audio, preload_models
 from scipy.io.wavfile import write as write_wav
 from IPython.display import Audio
 
@@ -227,7 +227,7 @@ VALL-E X 支持声音克隆！你可以使用任何人，角色，甚至是你�
 > VALL-E X 尝试匹配给定音频提示的音调、音高、情感和韵律。该模型还尝试保留音乐、环境噪声等。
 
 ```python
-from utils.prompt_making import make_prompt
+from vallex.utils.prompt_making import make_prompt
 
 ### Use given transcript
 make_prompt(name="paimon", audio_prompt_path="paimon_prompt.wav",
@@ -238,7 +238,7 @@ make_prompt(name="paimon", audio_prompt_path="paimon_prompt.wav")
 ```
 来尝试一下刚刚做好的音频提示吧！
 ```python
-from utils.generation import SAMPLE_RATE, generate_audio, preload_models
+from vallex.utils.generation import SAMPLE_RATE, generate_audio, preload_models
 from scipy.io.wavfile import write as write_wav
 
 # download and load all models

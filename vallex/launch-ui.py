@@ -3,11 +3,12 @@ import argparse
 import logging
 import os
 import pathlib
-import time
-import tempfile
 import platform
-import webbrowser
 import sys
+import tempfile
+import time
+import webbrowser
+
 print(f"default encoding is {sys.getdefaultencoding()},file system encoding is {sys.getfilesystemencoding()}")
 print(f"You are using Python version {platform.python_version()}")
 if(sys.version_info[0]<3 or sys.version_info[1]<7):
@@ -22,32 +23,30 @@ else:
 os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 
 import langid
+
 langid.set_languages(['en', 'zh', 'ja'])
 
 import nltk
+
 nltk.data.path = nltk.data.path + [os.path.join(os.getcwd(), "nltk_data")]
 
-import torch
-import torchaudio
+import multiprocessing
 import random
 
-import numpy as np
-
-from data.tokenizer import (
-    AudioTokenizer,
-    tokenize_audio,
-)
-from data.collation import get_text_token_collater
-from models.vallex import VALLE
-from utils.g2p import PhonemeBpeTokenizer
-from descriptions import *
-from macros import *
-from examples import *
-
 import gradio as gr
+import numpy as np
+import torch
+import torchaudio
 import whisper
+from descriptions import *
+from examples import *
 from vocos import Vocos
-import multiprocessing
+
+from vallex.data.collation import get_text_token_collater
+from vallex.data.tokenizer import AudioTokenizer, tokenize_audio
+from vallex.macros import *
+from vallex.models.vallex import VALLE
+from vallex.utils.g2p import PhonemeBpeTokenizer
 
 thread_count = multiprocessing.cpu_count()
 
@@ -366,7 +365,9 @@ def infer_from_prompt(text, language, accent, preset_prompt, prompt_file):
     return message, (24000, samples.squeeze(0).cpu().numpy())
 
 
-from utils.sentence_cutter import split_text_into_sentences
+from vallex.utils.sentence_cutter import split_text_into_sentences
+
+
 @torch.no_grad()
 def infer_long_text(text, preset_prompt, prompt=None, language='auto', accent='no-accent'):
     """

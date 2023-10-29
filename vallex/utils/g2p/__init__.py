@@ -1,7 +1,8 @@
 """ from https://github.com/keithito/tacotron """
-import utils.g2p.cleaners
-from utils.g2p.symbols import symbols
 from tokenizers import Tokenizer
+
+import vallex.utils.g2p.cleaners
+from vallex.utils.g2p.symbols import symbols
 
 # Mappings from symbol to numeric ID and vice versa:
 _symbol_to_id = {s: i for i, s in enumerate(symbols)}

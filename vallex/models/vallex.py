@@ -19,21 +19,21 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# from icefall.utils import make_pad_mask
-# from torchmetrics.classification import MulticlassAccuracy
 
-from data.input_strategies import PromptedFeatures
-from modules.embedding import SinePositionalEmbedding, TokenEmbedding
-from modules.transformer import (
-    AdaptiveLayerNorm,
-    LayerNorm,
-    TransformerDecoderLayer,
-    TransformerEncoder,
-    TransformerEncoderLayer,
-)
+from vallex.data.input_strategies import PromptedFeatures
+from vallex.modules.embedding import SinePositionalEmbedding, TokenEmbedding
+from vallex.modules.transformer import (AdaptiveLayerNorm, LayerNorm,
+                                        TransformerDecoderLayer,
+                                        TransformerEncoder,
+                                        TransformerEncoderLayer)
 
 from .macros import NUM_AUDIO_TOKENS, NUM_TEXT_TOKENS
 from .visualizer import visualize
+
+# from icefall.utils import make_pad_mask
+# from torchmetrics.classification import MulticlassAccuracy
+
+
 
 
 class Transpose(nn.Identity):
