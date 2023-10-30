@@ -22,17 +22,19 @@ import torch.nn.functional as F
 from vallex.models.vallex import Transpose
 from vallex.modules.embedding import SinePositionalEmbedding, TokenEmbedding
 from vallex.modules.scaling import BalancedDoubleSwish, ScaledLinear
-from vallex.modules.transformer import (BalancedBasicNorm, IdentityNorm,
-                                        TransformerDecoderLayer,
-                                        TransformerEncoder,
-                                        TransformerEncoderLayer)
+from vallex.modules.transformer import (
+    BalancedBasicNorm,
+    IdentityNorm,
+    TransformerDecoderLayer,
+    TransformerEncoder,
+    TransformerEncoderLayer,
+)
 
 from .macros import NUM_MEL_BINS, NUM_TEXT_TOKENS
 from .visualizer import visualize
 
 # from icefall.utils import make_pad_mask
 # from torchmetrics.classification import BinaryAccuracy
-
 
 
 IdentityNorm = IdentityNorm
@@ -125,9 +127,7 @@ class Transformer(nn.Module):
                         ScaledLinear, initial_scale=0.01
                     ),
                     linear1_feedforward_cls=ScaledLinear,
-                    linear2_feedforward_cls=partial(
-                        ScaledLinear, initial_scale=0.01
-                    ),
+                    linear2_feedforward_cls=partial(ScaledLinear, initial_scale=0.01),
                     activation=partial(
                         BalancedDoubleSwish,
                         channel_dim=-1,
@@ -153,9 +153,7 @@ class Transformer(nn.Module):
                         ScaledLinear, initial_scale=0.01
                     ),
                     linear1_feedforward_cls=ScaledLinear,
-                    linear2_feedforward_cls=partial(
-                        ScaledLinear, initial_scale=0.01
-                    ),
+                    linear2_feedforward_cls=partial(ScaledLinear, initial_scale=0.01),
                     activation=partial(
                         BalancedDoubleSwish,
                         channel_dim=-1,
@@ -358,9 +356,7 @@ class Transformer(nn.Module):
             y_pos = self.decoder_position(y_emb)
 
             tgt_mask = torch.triu(
-                torch.ones(
-                    y.shape[1], y.shape[1], device=y.device, dtype=torch.bool
-                ),
+                torch.ones(y.shape[1], y.shape[1], device=y.device, dtype=torch.bool),
                 diagonal=1,
             )
 
@@ -375,9 +371,7 @@ class Transformer(nn.Module):
 
             logits = self.stop_layer(y_dec[:, -1:]) > 0  # sigmoid(0.0) = 0.5
             if y.shape[1] > x_lens.max() * 10 or all(logits.cpu().numpy()):
-                print(
-                    f"TransformerTTS EOS [Text {x_lens[0]} -> Audio {y.shape[1]}]"
-                )
+                print(f"TransformerTTS EOS [Text {x_lens[0]} -> Audio {y.shape[1]}]")
                 break
 
             y = torch.concat([y, predict], dim=1)

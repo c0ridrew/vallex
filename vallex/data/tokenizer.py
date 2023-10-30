@@ -115,9 +115,7 @@ if __name__ == "__main__":
     model = EncodecModel.encodec_model_24khz()
     model.set_target_bandwidth(6.0)
 
-    samples = torch.from_numpy(np.random.random([4, 1, 1600])).type(
-        torch.float32
-    )
+    samples = torch.from_numpy(np.random.random([4, 1, 1600])).type(torch.float32)
     codes_raw = model.encode(samples)
 
     remove_encodec_weight_norm(model)
