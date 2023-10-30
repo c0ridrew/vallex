@@ -71,7 +71,7 @@ def sequence_to_text(sequence):
 
 def _clean_text(text, cleaner_names):
     for name in cleaner_names:
-        cleaner = getattr(utils.g2p.cleaners, name)
+        cleaner = getattr(vallex.utils.g2p.cleaners, name)
         if not cleaner:
             raise Exception("Unknown cleaner: %s" % name)
         text, langs = cleaner(text)
