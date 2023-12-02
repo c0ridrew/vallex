@@ -64,7 +64,7 @@ def transcribe_one(model, audio_path):
     return lang, text_pr
 
 
-def make_prompt(name, audio_prompt_path, transcript=None):
+def make_prompt(name, audio_prompt_path, transcript=None) -> str:
     global model, text_collater, text_tokenizer, codec
     wav_pr, sr = torchaudio.load(audio_prompt_path)
     # check length
@@ -95,6 +95,7 @@ def make_prompt(name, audio_prompt_path, transcript=None):
         lang_code=lang2code[lang_pr],
     )
     logging.info(f"Successful. Prompt saved to {save_path}")
+    return save_path
 
 
 def make_transcript(name, wav, sr, transcript=None):
