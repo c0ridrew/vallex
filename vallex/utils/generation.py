@@ -102,7 +102,7 @@ def preload_models():
 
 
 @torch.no_grad()
-def generate_audio(text, prompt=None, language="auto", accent="no-accent"):
+def generate_audio(text, prompt_data, language="auto", accent="no-accent"):
     global model, codec, vocos, text_tokenizer, text_collater
     text = text.replace("\n", "").strip(" ")
     # detect language
@@ -113,27 +113,14 @@ def generate_audio(text, prompt=None, language="auto", accent="no-accent"):
     text = lang_token + text + lang_token
 
     # load prompt
-    if prompt is not None:
-        prompt_path = prompt
-        if not os.path.exists(prompt_path):
-            prompt_path = "./presets/" + prompt + ".npz"
-        if not os.path.exists(prompt_path):
-            prompt_path = "./customs/" + prompt + ".npz"
-        if not os.path.exists(prompt_path):
-            raise ValueError(f"Cannot find prompt {prompt}")
-        prompt_data = np.load(prompt_path)
-        audio_prompts = prompt_data["audio_tokens"]
-        text_prompts = prompt_data["text_tokens"]
-        lang_pr = prompt_data["lang_code"]
-        lang_pr = code2lang[int(lang_pr)]
+    audio_prompts = prompt_data["audio_tokens"]
+    text_prompts = prompt_data["text_tokens"]
+    lang_pr = prompt_data["lang_code"]
+    lang_pr = code2lang[int(lang_pr)]
 
-        # numpy to tensor
-        audio_prompts = torch.tensor(audio_prompts).type(torch.int32).to(device)
-        text_prompts = torch.tensor(text_prompts).type(torch.int32)
-    else:
-        audio_prompts = torch.zeros([1, 0, NUM_QUANTIZERS]).type(torch.int32).to(device)
-        text_prompts = torch.zeros([1, 0]).type(torch.int32)
-        lang_pr = lang if lang != "mix" else "en"
+    # numpy to tensor
+    audio_prompts = torch.tensor(audio_prompts).type(torch.int32).to(device)
+    text_prompts = torch.tensor(text_prompts).type(torch.int32)
 
     enroll_x_lens = text_prompts.shape[-1]
     logging.info(f"synthesize text: {text}")
