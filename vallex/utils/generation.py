@@ -27,6 +27,8 @@ from vallex.models.vallex import VALLE
 from vallex.utils.g2p import PhonemeBpeTokenizer
 from vallex.utils.sentence_cutter import split_text_into_sentences
 
+DIR_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+
 device = torch.device("cpu")
 if torch.cuda.is_available():
     device = torch.device("cuda", 0)
@@ -34,7 +36,7 @@ if torch.backends.mps.is_available():
     device = torch.device("mps")
 url = "https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt"
 
-checkpoints_dir = "./checkpoints/"
+checkpoints_dir = f"{DIR_PATH}/checkpoints/"
 
 model_checkpoint_name = "vallex-checkpoint.pt"
 
@@ -44,7 +46,7 @@ codec = None
 
 vocos = None
 
-text_tokenizer = PhonemeBpeTokenizer(tokenizer_path="./utils/g2p/bpe_69.json")
+text_tokenizer = PhonemeBpeTokenizer(tokenizer_path=f"{DIR_PATH}/g2p/bpe_69.json")
 text_collater = get_text_token_collater()
 
 
