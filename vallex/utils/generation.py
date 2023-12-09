@@ -53,15 +53,6 @@ text_collater = get_text_token_collater()
 def preload_models(checkpoint_path: str):
     global model, codec, vocos
 
-    # download checkpoint if not exists
-    if not os.path.exists(os.path.join(checkpoints_dir, model_checkpoint_name)):
-        raise Exception(
-            "\n Model weights download failed, please go to 'https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt'"
-            "\n manually download model weights and put it to {} .".format(
-                os.getcwd() + "\checkpoints"
-            )
-        )
-
     # VALL-E
     model = VALLE(
         N_DIM,
