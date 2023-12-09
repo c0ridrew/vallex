@@ -50,31 +50,18 @@ text_tokenizer = PhonemeBpeTokenizer(tokenizer_path=f"{DIR_PATH}/g2p/bpe_69.json
 text_collater = get_text_token_collater()
 
 
-def preload_models():
+def preload_models(checkpoint_path: str):
     global model, codec, vocos
-    if not os.path.exists(checkpoints_dir):
-        os.mkdir(checkpoints_dir)
-    if not os.path.exists(os.path.join(checkpoints_dir, model_checkpoint_name)):
-        import wget
 
-        try:
-            logging.info(
-                "Downloading model from https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt ..."
+    # download checkpoint if not exists
+    if not os.path.exists(os.path.join(checkpoints_dir, model_checkpoint_name)):
+        raise Exception(
+            "\n Model weights download failed, please go to 'https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt'"
+            "\n manually download model weights and put it to {} .".format(
+                os.getcwd() + "\checkpoints"
             )
-            # download from https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt to ./checkpoints/vallex-checkpoint.pt
-            wget.download(
-                "https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt",
-                out="./checkpoints/vallex-checkpoint.pt",
-                bar=wget.bar_adaptive,
-            )
-        except Exception as e:
-            logging.info(e)
-            raise Exception(
-                "\n Model weights download failed, please go to 'https://huggingface.co/Plachta/VALL-E-X/resolve/main/vallex-checkpoint.pt'"
-                "\n manually download model weights and put it to {} .".format(
-                    os.getcwd() + "\checkpoints"
-                )
-            )
+        )
+
     # VALL-E
     model = VALLE(
         N_DIM,
@@ -89,7 +76,7 @@ def preload_models():
         num_quantizers=NUM_QUANTIZERS,
     ).to(device)
     checkpoint = torch.load(
-        os.path.join(checkpoints_dir, model_checkpoint_name), map_location="cpu"
+        checkpoint_path, map_location="cpu"
     )
     missing_keys, unexpected_keys = model.load_state_dict(
         checkpoint["model"], strict=True
