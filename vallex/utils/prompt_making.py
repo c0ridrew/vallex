@@ -64,9 +64,9 @@ def transcribe_one(model, audio_path):
     return lang, text_pr
 
 
-def make_prompt(name, audio_prompt_path, transcript=None) -> str:
+def make_prompt(name, input_audio_path, output_prompt_path, transcript=None):
     global model, text_collater, text_tokenizer, codec
-    wav_pr, sr = torchaudio.load(audio_prompt_path)
+    wav_pr, sr = torchaudio.load(input_audio_path)
     # check length
     if wav_pr.size(-1) / sr > 15:
         raise ValueError(
@@ -87,15 +87,13 @@ def make_prompt(name, audio_prompt_path, transcript=None) -> str:
     message = f"Detected language: {lang_pr}\n Detected text {text_pr}\n"
 
     # save as npz file
-    save_path = os.path.join(f"{DIR_PATH}/../customs/", f"{name}.npz")
     np.savez(
-        save_path,
+        output_prompt_path,
         audio_tokens=audio_tokens,
         text_tokens=text_tokens,
         lang_code=lang2code[lang_pr],
     )
-    logging.info(f"Successful. Prompt saved to {save_path}")
-    return save_path
+    logging.info(f"Successful. Prompt saved to {output_prompt_path}")
 
 
 def make_transcript(name, wav, sr, transcript=None):
